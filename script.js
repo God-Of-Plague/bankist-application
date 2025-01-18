@@ -1,12 +1,17 @@
 'use strict';
 
-///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Modal window
 
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -30,56 +35,67 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Button scrolling
-//variables
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
 
 //scrolling function
 btnScrollTo.addEventListener('click', function (e) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
-///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Page navigation[anchor links]
-
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   e.preventDefault();
 
-  // Matching strategy
   if (e.target.tagName == 'A') {
-    //we can also use -----if (e.target.classList.contains('nav__link'))
     const id = e.target.getAttribute('href');
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
 });
 
-///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Tabbed component
-
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (e) {
-  //make sure we click btn element even if click in span which is in btn.
   const clicked = e.target.closest('.operations__tab');
-  
-  // Guard clause
-  //we can't use if (e.target.classList.contains('btn')) 
-  //because if we press in span element then it won't work
+
   if (!clicked) return;
-  
-    // Remove active classes
-    tabs.forEach(t => t.classList.remove('operations__tab--active'));
-    tabsContent.forEach(c => c.classList.remove('operations__content--active'));
-  
-    // Activate tab
-    clicked.classList.add('operations__tab--active');
-  
-    // Activate content area
-    document
-      .querySelector(`.operations__content--${clicked.dataset.tab}`)
-      .classList.add('operations__content--active');
+
+  // Remove active classes
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  // Activate tab
+  clicked.classList.add('operations__tab--active');
+
+  // Activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
 });
+
+//////////////////////////////////////////////////////////////////////////////
+// Menu fade animation
+//when we hover over the pagenavigation links everything[including the logo and button] except the link that is hovered at present has to be dimnished.
+const handleHover = function (e) {
+  //mouse hover works normally on every nav[like button and logo etc.,]. so we have to make sure that we select anchor element.
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    //selecting all the links. for that first we are selecting it's parent link and then through that parent all the links.
+    //we can also directly select them like nav.querySelectorAll('.nav_link')
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    //make sure every link except the target get it's opacity adjusted.
+    siblings.forEach(el => {
+      //for mouseover opacity is 0.5[means all links dimnished] and for mouseout 1[resetting to original]
+      if (el !== link) el.style.opacity = this;
+    });
+    //make sure that opacity also includes logo
+    logo.style.opacity = this;
+  }
+};
+
+// Passing "argument" into handler
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
