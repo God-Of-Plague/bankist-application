@@ -30,4 +30,27 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-btn
+///////////////////////////////////////
+// Button scrolling
+//variables
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+//scrolling function
+btnScrollTo.addEventListener('click', function (e) {
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+///////////////////////////////////////
+// Page navigation[anchor links]
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+
+  // Matching strategy
+  if (e.target.tagName == 'A') {
+    //we can also use -----if (e.target.classList.contains('nav__link'))
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
