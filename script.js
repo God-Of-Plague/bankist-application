@@ -99,3 +99,56 @@ const handleHover = function (e) {
 // Passing "argument" into handler
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
+
+///////////////////////////////////////
+// Sticky navigation
+
+//this method is not recommonded because this handler runs with every scroll which is not effcient
+// // // const initialCoords = section1.getBoundingClientRect();
+// // // console.log(initialCoords);
+
+// // // window.addEventListener('scroll', function () {
+// // //   console.log(window.scrollY);
+
+// // //   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+// // //   else nav.classList.remove('sticky');
+// // // });
+
+// so instead of above method we use intersectionobserver api
+// syntax
+// let observer = new IntersectionObserver(callback, options);
+// callback: A function that gets called when the observed element's visibility changes.
+// options (optional): An object to configure the observer (see below for details).
+              // Options Object
+              // The options parameter allows you to customize the behavior of the IntersectionObserver. The options are:
+
+              // root: The element to use as the viewport for checking visibility. By default, it is null, meaning the browser's viewport.
+
+              // rootMargin: Similar to CSS margin, this allows you to expand or contract the root's bounding box. This value can be specified as a string (e.g., '0px', '10px 20px', or '10% 0px').
+
+              // threshold: A single number or an array of numbers between 0 and 1 that defines the percentage of the target element's visibility required to trigger the callback. For example:
+
+              // 0.5 means the callback is triggered when at least 50% of the element is visible.
+              // [0, 0.5, 1] triggers the callback when 0%, 50%, or 100% of the element is visible.
+// Sticky navigation: Intersection Observer API
+
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+
+headerObserver.observe(header);
+
+
