@@ -212,29 +212,24 @@ imgTargets.forEach(img => imgObserver.observe(img));
 
 ////////////////////////////////////
 // slider
+const slider=()=>{
 const slides = document.querySelectorAll('.slide');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
 const dotContainer = document.querySelector('.dots');
 
-// how the slider works.
-/*the currentslider is indicated by curslider. when the left or right arrow button is clicked then we have the slider has to move
-to make it move we use translate which makes the individual slider align side by side[by making it a diff of 0% 100% 200%[twice the size of slider]]
-the crucial one here is gotoslide fucntion which makes the slider align perfectly as we wish. think of the logic yourself
-when the left button is clicked we have to move to next slide[curslide++] and when it reaches the max slide then reset it to first slide[curslide=0]
-same for right but logic changes
- */
 let curSlide = 0;
 const maxSlide = slides.length;
 
+// Function to update the slide position and activate the corresponding dot
 const goToSlide = function (slide) {
   slides.forEach(
     (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
   );
-};
 
-// if we don't do this then all the slides will be on top of other until we press the right or left arrow button
-goToSlide(0);
+  // Activate the corresponding dot after moving the slides
+  activateDot(slide);
+};
 
 // Next slide
 const nextSlide = function () {
@@ -245,9 +240,9 @@ const nextSlide = function () {
   }
 
   goToSlide(curSlide);
-  activateDot(curSlide);
 };
 
+// Previous slide
 const prevSlide = function () {
   if (curSlide === 0) {
     curSlide = maxSlide - 1;
@@ -255,9 +250,54 @@ const prevSlide = function () {
     curSlide--;
   }
   goToSlide(curSlide);
-  activateDot(curSlide);
 };
 
 // Event handlers
 btnRight.addEventListener('click', nextSlide);
 btnLeft.addEventListener('click', prevSlide);
+
+// Create dots
+// to create dots here we use foreach on slides. we can also use normal for loop which runs slides.length times
+const createDots = function () {
+  slides.forEach(function (_, i) {
+    // this will create the html dots.
+    dotContainer.insertAdjacentHTML(
+      'beforeend',
+      `<button class="dots__dot" data-slide="${i}"></button>`
+    );
+  });
+};
+
+// Activate the corresponding dot
+const activateDot = function (slide) {
+  document
+    .querySelectorAll('.dots__dot')
+    .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+  document
+    .querySelector(`.dots__dot[data-slide="${slide}"]`)
+    .classList.add('dots__dot--active');
+};
+
+// Initialization
+const init = function () {
+  createDots(); // First, create the dots
+  goToSlide(0); // Then move to the first slide and activate the first dot
+};
+init();
+
+// Keyboard navigation
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowLeft') prevSlide();
+  if (e.key === 'ArrowRight') nextSlide();
+});
+
+// Dot navigation
+dotContainer.addEventListener('click', function (e) {
+  if (e.target.classList.contains('dots__dot')) {
+    const { slide } = e.target.dataset;
+    goToSlide(slide);
+  }
+});
+};
+slider();
