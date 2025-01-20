@@ -9,6 +9,7 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const nav = document.querySelector('.nav');
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
@@ -157,12 +158,6 @@ headerObserver.observe(header);
 
 const allSections = document.querySelectorAll('.section');
 
-// initially we will add this class to every section and make it disppear and later through the api we will remove the class one by one as the element appraoches.
-allSections.forEach(function (section) {
-  sectionObserver.observe(section);
-  section.classList.add('section--hidden');
-});
-
 const revealSection = function (entries, observer) {
   const [entry] = entries;
 
@@ -179,3 +174,38 @@ const sectionObserver = new IntersectionObserver(revealSection, {
   root: null,
   threshold: 0.15,
 });
+
+// initially we will add this class to every section and make it disppear and later through the api we will remove the class one by one as the element appraoches.
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+///////////////////////////////////////
+// Lazy loading images
+const imgTargets = document.querySelectorAll('img[data-src]');
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+
+  // Replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img'); // class 'lazy-img' makes it blurry. so we are removing blurry effect when it loads fully. otherwise it will look awkward[not fully loaded]
+  });
+
+  observer.unobserve(entry.target);
+};
+
+// we should load the images before only so that it won't take too much time
+// means when it comes in range before 200px observer runs and executes the callback func then targetsrc changes. it will compensates the time for loading.
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px', // to load it before 200px of scoll.
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
