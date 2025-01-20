@@ -209,3 +209,55 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTargets.forEach(img => imgObserver.observe(img));
+
+////////////////////////////////////
+// slider
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+const dotContainer = document.querySelector('.dots');
+
+// how the slider works.
+/*the currentslider is indicated by curslider. when the left or right arrow button is clicked then we have the slider has to move
+to make it move we use translate which makes the individual slider align side by side[by making it a diff of 0% 100% 200%[twice the size of slider]]
+the crucial one here is gotoslide fucntion which makes the slider align perfectly as we wish. think of the logic yourself
+when the left button is clicked we have to move to next slide[curslide++] and when it reaches the max slide then reset it to first slide[curslide=0]
+same for right but logic changes
+ */
+let curSlide = 0;
+const maxSlide = slides.length;
+
+const goToSlide = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+  );
+};
+
+// if we don't do this then all the slides will be on top of other until we press the right or left arrow button
+goToSlide(0);
+
+// Next slide
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) {
+    curSlide = 0;
+  } else {
+    curSlide++;
+  }
+
+  goToSlide(curSlide);
+  activateDot(curSlide);
+};
+
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else {
+    curSlide--;
+  }
+  goToSlide(curSlide);
+  activateDot(curSlide);
+};
+
+// Event handlers
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
