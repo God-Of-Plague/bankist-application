@@ -119,17 +119,17 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 // let observer = new IntersectionObserver(callback, options);
 // callback: A function that gets called when the observed element's visibility changes.
 // options (optional): An object to configure the observer (see below for details).
-              // Options Object
-              // The options parameter allows you to customize the behavior of the IntersectionObserver. The options are:
+// Options Object
+// The options parameter allows you to customize the behavior of the IntersectionObserver. The options are:
 
-              // root: The element to use as the viewport for checking visibility. By default, it is null, meaning the browser's viewport.
+// root: The element to use as the viewport for checking visibility. By default, it is null, meaning the browser's viewport.
 
-              // rootMargin: Similar to CSS margin, this allows you to expand or contract the root's bounding box. This value can be specified as a string (e.g., '0px', '10px 20px', or '10% 0px').
+// rootMargin: Similar to CSS margin, this allows you to expand or contract the root's bounding box. This value can be specified as a string (e.g., '0px', '10px 20px', or '10% 0px').
 
-              // threshold: A single number or an array of numbers between 0 and 1 that defines the percentage of the target element's visibility required to trigger the callback. For example:
+// threshold: A single number or an array of numbers between 0 and 1 that defines the percentage of the target element's visibility required to trigger the callback. For example:
 
-              // 0.5 means the callback is triggered when at least 50% of the element is visible.
-              // [0, 0.5, 1] triggers the callback when 0%, 50%, or 100% of the element is visible.
+// 0.5 means the callback is triggered when at least 50% of the element is visible.
+// [0, 0.5, 1] triggers the callback when 0%, 50%, or 100% of the element is visible.
 // Sticky navigation: Intersection Observer API
 
 const header = document.querySelector('.header');
@@ -151,4 +151,31 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 
 headerObserver.observe(header);
 
+///////////////////////////////////////
+// Reveal sections
+// for this we use same api as above
 
+const allSections = document.querySelectorAll('.section');
+
+// initially we will add this class to every section and make it disppear and later through the api we will remove the class one by one as the element appraoches.
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+
+  // bydefault first section will load without any effect because initially section 1 is target as we load.
+  // we make it so it will only happen when intersection happens
+  if (!entry.isIntersecting) return;
+
+  entry.target.classList.remove('section--hidden');
+  // once we remove the class we don't need to observe those sections again right. so ..........
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
