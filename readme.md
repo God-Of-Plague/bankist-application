@@ -28,10 +28,10 @@ Access the live demo here: [Bankist Application Demo](https://bankist-dom.netlif
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/God-Of-Plague/bankist-application.git
-Navigate to the project directory:
-
-cd bankist-application
+   git clone https://github.com/God-Of-Plague/bankist-application.git```
+2. **Navigate to the project directory:**
+   ```bash
+   cd bankist-application```
 Open index.html in your preferred web browser.
 
 Usage
