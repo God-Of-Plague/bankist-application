@@ -37,14 +37,14 @@ Access the live demo here: [Bankist Application Demo](https://bankist-dom.netlif
       Usage
       Login Credentials:
       
-      Username: js
-      Password: 1111
+      - Username: js
+      - Password: 1111
 4. **Operations:**
 
-      View Transactions: After logging in, view your transaction history and balance.
-      Transfer Funds: Use the transfer feature to send money to another account.
-      Request Loan: Request a loan if certain conditions are met.
-      Close Account: Permanently delete your account and associated data.
+      - View Transactions: After logging in, view your transaction history and balance.
+      - Transfer Funds: Use the transfer feature to send money to another account.
+      - Request Loan: Request a loan if certain conditions are met.
+      - Close Account: Permanently delete your account and associated data.
 
 License
 This project is licensed under the MIT License.
