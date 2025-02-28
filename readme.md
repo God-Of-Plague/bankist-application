@@ -49,6 +49,5 @@ Access the live demo here: [Bankist Application Demo](https://bankist-dom.netlif
 License
 This project is licensed under the MIT License.
 
-*Note: Ensure that your GitHub repository is public and includes the source code along with this `README.md` file to provide comprehensive information to users and collaborators.*
-::contentReference[oaicite:0]{index=0}
+
  
